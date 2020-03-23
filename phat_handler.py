@@ -17,7 +17,7 @@ for icon in glob.glob("resources/icon-*.png"):
     masks[icon_name] = inkyphat.create_mask(icon_image)
 
 # Load the built-in FredokaOne font
-font = ImageFont.truetype(inkyphat.fonts.FredokaOne, 32)
+font = ImageFont.truetype(inkyphat.fonts.FredokaOne, 20)
 
 statuses = {
     "on-a-call" : "On a call!\nCome back later",
@@ -42,7 +42,7 @@ class DisplayPiHat():
         inkyphat.set_border(inkyphat.BLACK)
 
         # Load our backdrop image
-        inkyphat.set_image("resources/backdrop.png")
+        # inkyphat.set_image("resources/backdrop.png")
 
         # Let's draw some lines!
         #inkyphat.line((69, 36, 69, 81)) # Vertical line
@@ -52,13 +52,11 @@ class DisplayPiHat():
         # And now some text
         status = statuses[status_id]
 
-        inkyphat.text((30, 25), status, inkyphat.WHITE, font=font)
-
-        txt = textwrap.fill(status, 16)
-        w, h = inkyphat._draw.multiline_textsize(txt, font)
+        # txt = textwrap.fill(status, 16)
+        w, h = inkyphat._draw.multiline_textsize(status, font)
         x = (inkyphat.WIDTH / 2) - (w / 2)
         y = (inkyphat.HEIGHT / 2) - (h / 2)
-        inkyphat._draw.multiline_text((x, y), txt, inkyphat.BLACK, font)
+        inkyphat._draw.multiline_text((x, y), status, inkyphat.BLACK, font)
 
         self.display()
 
