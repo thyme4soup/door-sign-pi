@@ -30,6 +30,14 @@ class DisplayPiHat():
         pass
 
     def update(self, status_id):
+        try:
+            inkyphat.set_colour(self.color)
+        except ValueError:
+            print('Invalid colour "{}" for V{}\n'.format(self.color, inkyphat.get_version()))
+            if inkyphat.get_version() == 2:
+                sys.exit(1)
+            print('Defaulting to "red"')
+
         inkyphat.set_border(inkyphat.BLACK)
 
         # Load our backdrop image
