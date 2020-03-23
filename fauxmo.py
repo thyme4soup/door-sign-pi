@@ -350,11 +350,11 @@ class dummy_handler(object):
         self.name = name
 
     def on(self):
-        print self.name, "ON"
+        print(self.name, "ON")
         return True
 
     def off(self):
-        print self.name, "OFF"
+        print(self.name, "OFF")
         return True
 
 
