@@ -54,7 +54,7 @@ class DisplayPiHat():
 
         inkyphat.text((30, 25), status, inkyphat.WHITE, font=font)
 
-        txt = textwrap.fill(status, 32)
+        txt = textwrap.fill(status, 16)
         w, h = inkyphat._draw.multiline_textsize(txt, font)
         x = (inkyphat.WIDTH / 2) - (w / 2)
         y = (inkyphat.HEIGHT / 2) - (h / 2)
