@@ -5,7 +5,6 @@ import glob
 import sys
 from PIL import Image, ImageFont
 import inkyphat
-import textwrap
 
 icons = {}
 masks = {}
@@ -45,14 +44,9 @@ class DisplayPiHat():
         # inkyphat.set_image("resources/backdrop.png")
 
         # Let's draw some lines!
-        #inkyphat.line((69, 36, 69, 81)) # Vertical line
-        #inkyphat.line((31, 35, 184, 35)) # Horizontal top line
-        #inkyphat.line((69, 58, 174, 58)) # Horizontal middle line
-
         # And now some text
         status = statuses[status_id]
 
-        # txt = textwrap.fill(status, 16)
         w, h = inkyphat._draw.multiline_textsize(status, font)
         x = (inkyphat.WIDTH / 2) - (w / 2)
         y = (inkyphat.HEIGHT / 2) - (h / 2)

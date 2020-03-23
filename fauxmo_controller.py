@@ -51,6 +51,6 @@ if __name__ == "__main__":
             # Allow time for a ctrl-c to stop the process
             p.poll(100)
             time.sleep(0.1)
-        except Exception, e:
+        except (Exception, e):
             logging.critical("Critical exception: " + str(e))
             break
