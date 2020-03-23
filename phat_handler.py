@@ -5,6 +5,7 @@ import glob
 import sys
 from PIL import Image, ImageFont
 import inkyphat
+import textwrap
 
 icons = {}
 masks = {}
@@ -19,10 +20,10 @@ for icon in glob.glob("resources/icon-*.png"):
 font = ImageFont.truetype(inkyphat.fonts.FredokaOne, 32)
 
 statuses = {
-    "on-a-call" : "On a call! Come back later",
-    "do-not-disturb" : "Busy! Come back later",
-    "busy" : "Busy! Knock first",
-    "free" : "Welcome! (knock first)"
+    "on-a-call" : "On a call!\nCome back later",
+    "do-not-disturb" : "Busy!\nCome back later",
+    "busy" : "Busy!\nKnock first",
+    "free" : "Welcome!\n(knock first)"
 }
 
 class DisplayPiHat():
@@ -49,7 +50,15 @@ class DisplayPiHat():
         #inkyphat.line((69, 58, 174, 58)) # Horizontal middle line
 
         # And now some text
-        inkyphat.text((30, 25), statuses[status_id], inkyphat.WHITE, font=font)
+        status = statuses[status_id]
+
+        inkyphat.text((30, 25), status, inkyphat.WHITE, font=font)
+
+        txt = textwrap.fill(status, 32)
+        w, h = inkyphat._draw.multiline_textsize(txt, font)
+        x = (inkyphat.WIDTH / 2) - (w / 2)
+        y = (inkyphat.HEIGHT / 2) - (h / 2)
+        inkyphat._draw.multiline_text((x, y), txt, inkyphat.BLACK, font)
 
         self.display()
 
