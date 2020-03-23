@@ -16,7 +16,7 @@ for icon in glob.glob("resources/icon-*.png"):
     masks[icon_name] = inkyphat.create_mask(icon_image)
 
 # Load the built-in FredokaOne font
-font = ImageFont.truetype(inkyphat.fonts.FredokaOne, 36)
+font = ImageFont.truetype(inkyphat.fonts.FredokaOne, 32)
 
 statuses = {
     "on-a-call" : "On a call! Come back later",
