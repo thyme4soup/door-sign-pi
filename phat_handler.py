@@ -31,7 +31,7 @@ class DisplayPiHat():
 
     def update(self, status_id):
         try:
-            inkyphat.set_colour(self.color)
+            inkyphat.set_colour("Black")
         except ValueError:
             print('Invalid colour "{}" for V{}\n'.format(self.color, inkyphat.get_version()))
             if inkyphat.get_version() == 2:
