@@ -53,4 +53,4 @@ if __name__ == "__main__":
 
     display = DisplayPiHat()
 
-    display.update(statuses[0])
+    display.update(list(statuses.keys())[0])
