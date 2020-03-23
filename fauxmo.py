@@ -286,17 +286,17 @@ class upnp_broadcast_responder(object):
 
             try:
                 self.ssock.bind(('',self.port))
-            except (Exception, e):
+            except Exception as e:
                 dbg("WARNING: Failed to bind %s:%d: %s" , (self.ip,self.port,e))
                 ok = False
 
             try:
                 self.ssock.setsockopt(socket.IPPROTO_IP,socket.IP_ADD_MEMBERSHIP,self.mreq)
-            except (Exception, e):
+            except Exception as e:
                 dbg('WARNING: Failed to join multicast group:',e)
                 ok = False
 
-        except (Exception, e):
+        except Exception as e:
             dbg("Failed to initialize UPnP sockets:",e)
             return False
         if ok:
@@ -308,10 +308,10 @@ class upnp_broadcast_responder(object):
     def do_read(self, fileno):
         data, sender = self.recvfrom(1024)
         if data:
-            if data.find('M-SEARCH') == 0 and data.find('urn:Belkin:device:**') != -1:
+            if data.find('M-SEARCH'.encode()) == 0 and data.find('urn:Belkin:device:**'.encode()) != -1:
                 for device in self.devices:
                     time.sleep(0.5)
-                    device.respond_to_search(sender, 'urn:Belkin:device:**')
+                    device.respond_to_search(sender, 'urn:Belkin:device:**'.encode())
             else:
                 pass
 
@@ -329,7 +329,7 @@ class upnp_broadcast_responder(object):
                 return self.ssock.recvfrom(size)
             else:
                 return False, False
-        except (Exception, e):
+        except Exception as e:
             dbg(e)
             return False, False
 
@@ -402,6 +402,6 @@ if __name__ == "__main__":
             # Allow time for a ctrl-c to stop the process
             p.poll(100)
             time.sleep(0.1)
-        except (Exception, e):
+        except Exception as e:
             dbg(e)
             break
