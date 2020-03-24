@@ -145,7 +145,7 @@ class upnp_device(object):
             self.client_sockets[client_socket.fileno()] = (client_socket, client_address)
         else:
             data, sender = self.client_sockets[fileno][0].recvfrom(4096)
-            logging.debug(str(data))
+            logging.debug(str(data), sender)
             if not data:
                 self.poller.remove(self, fileno)
                 del(self.client_sockets[fileno])
