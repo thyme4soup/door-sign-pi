@@ -204,6 +204,7 @@ class fauxmo(upnp_device):
         return self.name
 
     def handle_request(self, data, sender, socket, client_address):
+        data = str(data)
         if data.find('GET /setup.xml HTTP/1.1') == 0:
             dbg("Responding to setup.xml for %s" % self.name)
             xml = SETUP_XML % {'device_name' : self.name, 'device_serial' : self.serial}
@@ -218,7 +219,7 @@ class fauxmo(upnp_device):
                        "CONNECTION: close\r\n"
                        "\r\n"
                        "%s" % (len(xml), date_str, xml))
-            socket.send(message)
+            socket.send(message.encode('utf-8'))
         elif data.find('SOAPACTION: "urn:Belkin:service:basicevent:1#SetBinaryState"') != -1:
             success = False
             if data.find('<BinaryState>1</BinaryState>') != -1:
@@ -247,7 +248,7 @@ class fauxmo(upnp_device):
                            "CONNECTION: close\r\n"
                            "\r\n"
                            "%s" % (len(soap), date_str, soap))
-                socket.send(message)
+                socket.send(message.encode('utf-8'))
         else:
             dbg(data)
 
