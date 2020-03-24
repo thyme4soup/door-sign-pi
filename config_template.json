@@ -1,0 +1,10 @@
+{
+    "FAUXMO": {
+        "ip_address": "auto"
+    },
+    "PLUGINS": {
+        "SimpleHTTPPlugin": {
+            "DEVICES": [%DEVICE-LIST%]
+        }
+    }
+}

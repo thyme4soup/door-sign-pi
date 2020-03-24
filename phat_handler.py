@@ -37,7 +37,7 @@ class DisplayPiHat():
             if inkyphat.get_version() == 2:
                 sys.exit(1)
             print('Defaulting to "red"')
-
+        inkyphat.clear()
         inkyphat.set_border(inkyphat.BLACK)
 
         # Load our backdrop image

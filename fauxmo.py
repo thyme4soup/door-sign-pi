@@ -54,6 +54,19 @@ SETUP_XML = """<?xml version="1.0"?>
 </root>
 """
 
+soap_format = (
+    "<s:Envelope "
+    'xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" '
+    's:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">'
+    "<s:Body>"
+    "<u:{action}{action_type}Response "
+    'xmlns:u="urn:Belkin:service:basicevent:1">'
+    "<{action_type}>{return_val}</{action_type}>"
+    "</u:{action}{action_type}Response>"
+    "</s:Body>"
+    "</s:Envelope>"
+).format
+
 
 def dbg(msg):
     logging.debug(msg)
@@ -145,7 +158,7 @@ class upnp_device(object):
             self.client_sockets[client_socket.fileno()] = (client_socket, client_address)
         else:
             data, sender = self.client_sockets[fileno][0].recvfrom(4096)
-            logging.debug(str(data), sender)
+            logging.debug(str(data))
             if not data:
                 self.poller.remove(self, fileno)
                 del(self.client_sockets[fileno])
@@ -186,6 +199,27 @@ class fauxmo(upnp_device):
     @staticmethod
     def make_uuid(name):
         return ''.join(["%x" % sum([ord(c) for c in name])] + ["%x" % ord(c) for c in "%sfauxmo!" % name])[:14]
+    @staticmethod
+    def add_http_headers(xml: str) -> str:
+        """Add HTTP headers to an XML body.
+        Args:
+            xml: XML body that needs HTTP headers
+        """
+        date_str = email.utils.formatdate(timeval=None, localtime=False, usegmt=True)
+        newline = "\n"
+        return (newline).join(
+            [
+                "HTTP/1.1 200 OK",
+                f'CONTENT-LENGTH: {len(xml.encode("utf8"))}',
+                "CONTENT-TYPE: text/xml",
+                f"DATE: {date_str}",
+                "LAST-MODIFIED: Sat, 01 Jan 2000 00:01:15 GMT",
+                "SERVER: Unspecified, UPnP/1.0, Unspecified",
+                "X-User-Agent: Fauxmo",
+                f"CONNECTION: close{newline}",
+                f"{xml}",
+            ]
+        )
 
     def __init__(self, name, listener, poller, ip_address, port, action_handler = None):
         self.serial = self.make_uuid(name)
@@ -204,20 +238,13 @@ class fauxmo(upnp_device):
         return self.name
 
     def send_state(self, socket):
-        soap = f'<?xml version=\"1.0\" encoding=\"utf-8\"?><s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><s:Body><u:GetBinaryState xmlns:u=\"urn:Belkin:service:basicevent:1\"><BinaryState>{0}</BinaryState></u:GetBinaryState></s:Body></s:Envelope>'
         date_str = email.utils.formatdate(timeval=None, localtime=False, usegmt=True)
-        message = ("HTTP/1.1 200 OK\r\n"
-                   "CONTENT-LENGTH: %d\r\n"
-                   "CONTENT-TYPE: text/xml charset=\"utf-8\"\r\n"
-                   "DATE: %s\r\n"
-                   "EXT:\r\n"
-                   "SERVER: Unspecified, UPnP/1.0, Unspecified\r\n"
-                   "X-User-Agent: redsonic\r\n"
-                   "CONNECTION: close\r\n"
-                   "\r\n"
-                   "%s" % (len(soap), date_str, soap))
-        dbg(message)
-        socket.send(message.encode('utf-8'))
+        soap_message = soap_format(
+            action='Get', action_type='BinaryState', return_val='on'
+        )
+        response = self.add_http_headers(soap_message)
+        dbg(response)
+        socket.send(response.encode('utf-8'))
 
     def handle_request(self, data, sender, socket, client_address):
         data = str(data)
