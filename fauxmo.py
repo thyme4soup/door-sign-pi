@@ -44,7 +44,7 @@ import logging
 SETUP_XML = """<?xml version="1.0"?>
 <root>
   <device>
-    <deviceType>urn:MakerMusings:device:controllee:1</deviceType>
+    <device(Type)>urn:MakerMusings:device:controllee:1</deviceType>
     <friendlyName>%(device_name)s</friendlyName>
     <manufacturer>Belkin International Inc.</manufacturer>
     <modelName>Emulated Socket</modelName>
@@ -145,7 +145,7 @@ class upnp_device(object):
             self.client_sockets[client_socket.fileno()] = (client_socket, client_address)
         else:
             data, sender = self.client_sockets[fileno][0].recvfrom(4096)
-            logging.debug(str(type(data)))
+            logging.debug(str(data))
             if not data:
                 self.poller.remove(self, fileno)
                 del(self.client_sockets[fileno])
