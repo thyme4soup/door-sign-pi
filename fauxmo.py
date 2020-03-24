@@ -216,6 +216,7 @@ class fauxmo(upnp_device):
                    "CONNECTION: close\r\n"
                    "\r\n"
                    "%s" % (len(soap), date_str, soap))
+        dbg(message)
         socket.send(message.encode('utf-8'))
 
     def handle_request(self, data, sender, socket, client_address):
