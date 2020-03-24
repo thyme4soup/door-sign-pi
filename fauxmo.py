@@ -204,11 +204,7 @@ class fauxmo(upnp_device):
         return self.name
 
     def send_state(self, socket):
-        soap = "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + \
-               "<s:Body>\r\n" + \
-               "<BinaryState>0</BinaryState>\r\n" + \
-               "</u:GetBinaryStateResponse>\r\n" + \
-               "</s:Body> </s:Envelope>\r\n"
+        soap = f'<?xml version=\"1.0\" encoding=\"utf-8\"?><s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><s:Body><u:GetBinaryState xmlns:u=\"urn:Belkin:service:basicevent:1\"><BinaryState>{0}</BinaryState></u:GetBinaryState></s:Body></s:Envelope>'
         date_str = email.utils.formatdate(timeval=None, localtime=False, usegmt=True)
         message = ("HTTP/1.1 200 OK\r\n"
                    "CONTENT-LENGTH: %d\r\n"
