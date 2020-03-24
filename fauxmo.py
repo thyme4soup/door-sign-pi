@@ -221,6 +221,7 @@ class fauxmo(upnp_device):
 
     def handle_request(self, data, sender, socket, client_address):
         data = str(data)
+        dbg(data)
         if data.find('GET /setup.xml HTTP/1.1') >= 0:
             dbg("Responding to setup.xml for %s" % self.name)
             xml = SETUP_XML % {'device_name' : self.name, 'device_serial' : self.serial}
