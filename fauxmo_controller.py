@@ -13,7 +13,7 @@ class device_handler(debounce_handler):
        Publishes the IP address of the Echo making the request.
     """
     TRIGGERS = {
-        label:port for (label, port) in zip(statuses.keys(), range(50015, 50015 + len(statuses.keys())))
+        label:port for (label, port) in zip(statuses.keys(), range(52003, 52003 + len(statuses.keys())))
     }
 
     def __init__(self):
