@@ -320,8 +320,6 @@ class upnp_broadcast_responder(object):
         if data:
             data = str(data)
             if data.find('M-SEARCH') >= 0:
-                logging.debug(data)
-                logging.debug(sender)
                 logging.debug(data.find('M-SEARCH'))
                 if data.find('upnp:rootdevice') != -1:
                     logging.debug("Someone's looking for us! Responding...")
