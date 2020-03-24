@@ -253,10 +253,10 @@ class fauxmo(upnp_device):
                 dbg("Unknown Binary State request:")
                 dbg(data)
             if success:
-                send_state(socket)
+                self.send_state(socket)
         elif data.find('SOAPACTION: "urn:Belkin:service:basicevent:1#GetBinaryState"') != -1:
             logging.debug('responding to state request!')
-            send_state(socket)
+            self.send_state(socket)
         else:
             dbg(data)
 
