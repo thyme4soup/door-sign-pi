@@ -317,7 +317,7 @@ class upnp_broadcast_responder(object):
                     logging.debug("Someone's looking for us! Responding...")
                     for device in self.devices:
                         time.sleep(0.5)
-                        device.respond_to_search(sender, 'upnp:rootdevice')
+                        device.respond_to_search(sender, b'upnp:rootdevice')
             else:
                 pass
 
