@@ -53,4 +53,5 @@ if __name__ == "__main__":
             time.sleep(0.1)
         except Exception as e:
             logging.critical("Critical exception: " + str(e))
+            logging.exception("in fauxmo_controller")
             break

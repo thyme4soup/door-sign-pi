@@ -330,7 +330,8 @@ class upnp_broadcast_responder(object):
             else:
                 return False, False
         except Exception as e:
-            dbg(e)
+            dbg(e.print)
+            logging.exception("in recvfrom")
             return False, False
 
     def add_device(self, device):
@@ -403,5 +404,6 @@ if __name__ == "__main__":
             p.poll(100)
             time.sleep(0.1)
         except Exception as e:
+            logging.exception("in main")
             dbg(e)
             break
