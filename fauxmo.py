@@ -310,7 +310,7 @@ class upnp_broadcast_responder(object):
         data, sender = self.recvfrom(1024)
         if data:
             data = str(data)
-            if data.find('M-SEARCH') <= 5:
+            if data.find('M-SEARCH') >= 0:
                 logging.debug(data)
                 logging.debug(data.find('M-SEARCH'))
                 if data.find('urn:Belkin:device:**') != -1:
