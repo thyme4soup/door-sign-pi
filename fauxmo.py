@@ -309,10 +309,11 @@ class upnp_broadcast_responder(object):
     def do_read(self, fileno):
         data, sender = self.recvfrom(1024)
         if data:
-            if data.find('M-SEARCH') == 0 and data.find('urn:Belkin:device:**') != -1:
+            logger.debug(str(type(data)))
+            if data.find(b'M-SEARCH') == 0 and data.find(b'urn:Belkin:device:**') != -1:
                 for device in self.devices:
                     time.sleep(0.5)
-                    device.respond_to_search(sender, 'urn:Belkin:device:**')
+                    device.respond_to_search(sender, b'urn:Belkin:device:**')
             else:
                 pass
 
