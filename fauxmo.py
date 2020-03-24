@@ -177,7 +177,7 @@ class upnp_device(object):
                 message += "%s\r\n" % header
         message += "\r\n"
         temp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        temp_socket.sendto(message, destination)
+        temp_socket.sendto(message.encode('utf-8'), destination)
 
 
 # This subclass does the bulk of the work to mimic a WeMo switch on the network.
