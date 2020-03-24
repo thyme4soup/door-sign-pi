@@ -310,7 +310,9 @@ class upnp_broadcast_responder(object):
         data, sender = self.recvfrom(1024)
         if data:
             data = str(data)
+            logging.debug(data)
             if data.find('M-SEARCH') <= 5 and data.find('urn:Belkin:device:**') != -1:
+                logging.debug("Someone's looking for us! Responding...")
                 for device in self.devices:
                     time.sleep(0.5)
                     device.respond_to_search(sender, 'urn:Belkin:device:**')
