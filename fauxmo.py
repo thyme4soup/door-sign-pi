@@ -254,6 +254,7 @@ class fauxmo(upnp_device):
             logging.debug('responding to state request!')
             self.send_state(socket)
         else:
+            dbg("Unknown request")
             dbg(data)
 
     def on(self):
