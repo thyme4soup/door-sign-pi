@@ -203,6 +203,25 @@ class fauxmo(upnp_device):
     def get_name(self):
         return self.name
 
+    def send_state(self, socket):
+        soap = "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + \
+               "<s:Body>\r\n" + \
+               "<BinaryState>0</BinaryState>\r\n" + \
+               "</u:GetBinaryStateResponse>\r\n" + \
+               "</s:Body> </s:Envelope>\r\n"
+        date_str = email.utils.formatdate(timeval=None, localtime=False, usegmt=True)
+        message = ("HTTP/1.1 200 OK\r\n"
+                   "CONTENT-LENGTH: %d\r\n"
+                   "CONTENT-TYPE: text/xml charset=\"utf-8\"\r\n"
+                   "DATE: %s\r\n"
+                   "EXT:\r\n"
+                   "SERVER: Unspecified, UPnP/1.0, Unspecified\r\n"
+                   "X-User-Agent: redsonic\r\n"
+                   "CONNECTION: close\r\n"
+                   "\r\n"
+                   "%s" % (len(soap), date_str, soap))
+        socket.send(message.encode('utf-8'))
+
     def handle_request(self, data, sender, socket, client_address):
         data = str(data)
         if data.find('GET /setup.xml HTTP/1.1') >= 0:
@@ -234,21 +253,10 @@ class fauxmo(upnp_device):
                 dbg("Unknown Binary State request:")
                 dbg(data)
             if success:
-                # The echo is happy with the 200 status code and doesn't
-                # appear to care about the SOAP response body
-                soap = ""
-                date_str = email.utils.formatdate(timeval=None, localtime=False, usegmt=True)
-                message = ("HTTP/1.1 200 OK\r\n"
-                           "CONTENT-LENGTH: %d\r\n"
-                           "CONTENT-TYPE: text/xml charset=\"utf-8\"\r\n"
-                           "DATE: %s\r\n"
-                           "EXT:\r\n"
-                           "SERVER: Unspecified, UPnP/1.0, Unspecified\r\n"
-                           "X-User-Agent: redsonic\r\n"
-                           "CONNECTION: close\r\n"
-                           "\r\n"
-                           "%s" % (len(soap), date_str, soap))
-                socket.send(message.encode('utf-8'))
+                send_state(socket)
+        elif data.find('SOAPACTION: "urn:Belkin:service:basicevent:1#GetBinaryState"') != -1:
+            logging.debug('responding to state request!')
+            send_state(socket)
         else:
             dbg(data)
 
